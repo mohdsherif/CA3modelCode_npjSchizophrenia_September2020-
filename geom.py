@@ -10,7 +10,7 @@ from conf import *
 def setfcfg ():
   '''determine config file'''
   fcfg = "netcfg.cfg" # default config file name
-  for i in xrange(len(sys.argv)):
+  for i in range(len(sys.argv)):
     if sys.argv[i].endswith(".cfg") and os.path.exists(sys.argv[i]):
       fcfg = sys.argv[i]
   print ("config file is " , fcfg)
