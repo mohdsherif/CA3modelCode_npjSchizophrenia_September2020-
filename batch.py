@@ -46,12 +46,12 @@ def ntebatch(nlevels,startnum=0):
             for i1,r1 in enumerate(x):
                 #net.olm.set_r("somaNMDA",r1)
                 if y < startnum:
-                    print "skipping sim num ", y
+                    print ("skipping sim num ", y)
                     y += 1
                     continue
                 s = "./mod/x86_64/special -python ntebatchrun.py"
                 s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)
-                print "sim num = ", y, ", command = ", s
+                print ("sim num = ", y, ", command = ", s)
                 y += 1
                 mylog(s)
                 os.system(s)
@@ -88,12 +88,12 @@ def nmbatch(nlevels,startnum=0):
                         #net.pyr.set_r("BdendNMDA",r3)
                         for i4, r4 in enumerate(x):
                             if y < startnum:
-                                print "skipping sim num ", y
+                                print ("skipping sim num ", y)
                                 y += 1
                                 continue
                             s = "./mod/x86_64/special -python nmbatchrun.py"
                             s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)+" "+str(r2)+" "+str(r3)+" "+str(r4)
-                            print "sim num = ", y, ", command = ", s
+                            print ("sim num = ", y, ", command = ", s)
                             y += 1
                             mylog(s)
                             os.system(s)
@@ -113,7 +113,7 @@ def longihbatchPYRBAS (nlevels,startnum=0,qsz=25):
     for ih1 in x:
         for ih2 in x:
             if y < startnum:
-                print "skipping sim num ", y
+                print ("skipping sim num ", y)
                 y += 1
                 continue
             s = "./mod/x86_64/special -python ihbatchrun.py"
@@ -121,7 +121,7 @@ def longihbatchPYRBAS (nlevels,startnum=0,qsz=25):
             p = multiprocessing.Process(target=myworker,args=(s,2))
             procs.append(p)
             q.put(p,True) # put proc on q and wait for free slot
-            print "sim num = ", y, ", command = ", s
+            print ("sim num = ", y, ", command = ", s)
             mylog(s)
             p.start() # maybe have to put this before placing on q
             y += 1
@@ -141,7 +141,7 @@ def longihbatchOLM (nlevels,startnum=0,qsz=11):
 
   for ih1 in x:
     if y < startnum:
-      print "skipping sim num ", y
+      print ("skipping sim num ", y)
       y += 1
       continue
     s = "./mod/x86_64/special -python ihbatchrun.py"
@@ -149,7 +149,7 @@ def longihbatchOLM (nlevels,startnum=0,qsz=11):
     p = multiprocessing.Process(target=myworker,args=(s,2))
     procs.append(p)
     q.put(p,True) # put proc on q and wait for free slot
-    print "sim num = ", y, ", command = ", s
+    print ("sim num = ", y, ", command = ", s)
     mylog(s)
     p.start() # maybe have to put this before placing on q
     y += 1
@@ -199,12 +199,12 @@ def ihbatchPYRBAS (nlevels,startnum=0):
                     #    continue # already ran same values of r1,r2
                     for xll in xl:
                         if y < startnum:
-                            print "skipping sim num ", y
+                            print ("skipping sim num ", y)
                             y += 1
                             continue
                         s = "./mod/x86_64/special -python ihbatchrun.py"
                         s += " "+str(iseed)+" "+str(wseed)+" "+str(xll[0])+" "+str(xll[1])+" "+str(xll[2])
-                        print "sim num = ", y, ", command = ", s
+                        print ("sim num = ", y, ", command = ", s)
                         y += 1
                         mylog(s)
                         os.system(s)
@@ -246,12 +246,12 @@ def ihbatch (nlevels,startnum=0):
           xl = [[r1, r1, r1], [r1, 1.0, 1.0], [1.0, r1, 1.0], [1.0, 1.0, r1] ]
         for xll in xl:
           if y < startnum:
-            print "skipping sim num ", y
+            print ("skipping sim num ", y)
             y += 1
             continue
           s = "./mod/x86_64/special -python ihbatchrun.py"
           s += " "+str(iseed)+" "+str(wseed)+" "+str(xll[0])+" "+str(xll[1])+" "+str(xll[2])
-          print "sim num = ", y, ", command = ", s
+          print ("sim num = ", y, ", command = ", s)
           y += 1
           mylog(s)
           os.system(s)
@@ -337,7 +337,7 @@ def testit ():
 #    from neuron import h
 #    from network import net
 #    from run import loadminrundat
-    print h,net,loadminrundat
+    print (h,net,loadminrundat)
 
 # get cross-frequency coupling arrays  - vlfp is a vector
 def getcfc (vlfp):
@@ -358,12 +358,12 @@ def addCFCcol (nqb,datadir="./data/"):
         nqb.resize("fcfc")
         nqb.strdec("fcfc")
         nqb.pad()
-    for i in xrange(int(nqb.v[0].size())):
-        print "up to " + str(i) + " out of " + str(nqb.v[0].size())
+    for i in range(int(nqb.v[0].size())):
+        print ("up to " + str(i) + " out of " + str(nqb.v[0].size()))
         simstr = nqb.get("simstr",i).s
         fcfc = "./data/cfc/" + simstr + "_cfc.txt"
         if os.path.exists(fcfc):
-            print "skipping ", fcfc, " already done."
+            print ("skipping ", fcfc, " already done.")
             nqb.set("fcfc",i,fcfc)
             continue
         loadminrundat(simstr,datadir)
@@ -388,8 +388,8 @@ def addnqpcol(nqb,skipms=200,ty=0,datadir="./data/"):
     if nqb.fi("vlfp") != -1: hasvlfp = True
     v1=h.Vector()
     nsamp = skipms / h.dt # number of samples to skip from start,end
-    for i in xrange(int(nqb.v[0].size())):
-        print "up to " + str(i) + " out of " + str(nqb.v[0].size())
+    for i in range(int(nqb.v[0].size())):
+        print ("up to " + str(i) + " out of " + str(nqb.v[0].size()))
         if hasvlfp:
             v1.copy(nqb.get("vlfp",i).o[0])
         else:
@@ -415,12 +415,12 @@ def addCVpcol (nqb,skipms=200,simdur=8e3,datadir="./data/"):
         for s in ["pyrCVp","basCVp","olmCVp","pyrbasCVp","pyrolmCVp","basolmCVp","allCVp"]: nqb.resize(s)
         nqb.pad()
     cdx = int(nqb.fi("pyrCVp")) # column index
-    for i in xrange(int(nqb.v[0].size())):
-        print "up to " + str(i) + " out of " + str(nqb.v[0].size())
+    for i in range(int(nqb.v[0].size())):
+        print ("up to " + str(i) + " out of " + str(nqb.v[0].size()))
         loadminrundat(nqb.get("simstr",i).s,datadir)
         net.snq.verbose=0
         idx = cdx
-        for ty in xrange(7):
+        for ty in range(7):
             cvp = 0
             if ty <= 2: # PYR then BAS then OLM
                 if net.snq.select("ty",ty,"t","[]",skipms,simdur-skipms) > 0:
@@ -449,12 +449,12 @@ def addHzcol (nqb,skipms=200,simdur=8e3,datadir="./data/"):
         for s in ["pyrHz", "basHz", "olmHz"]: nqb.resize(s)
         nqb.pad()
     cdx = int(nqb.fi("pyrHz")) # column index
-    for i in xrange(int(nqb.v[0].size())):
-        print "up to " + str(i) + " out of " + str(nqb.v[0].size())
+    for i in range(int(nqb.v[0].size())):
+        print ("up to " + str(i) + " out of " + str(nqb.v[0].size()))
         loadminrundat(nqb.get("simstr",i).s,datadir)
         net.snq.verbose=0
         idx = cdx
-        for ty in xrange(3):
+        for ty in range(3):
             nspks = net.snq.select("ty",ty,"t","[]",skipms,simdur-skipms)
             hz = 1e3 * nspks / ( (simdur-2*skipms) * net.cells[ty].n ) # to hz
             nqb.v[idx].x[i] = hz
@@ -470,12 +470,12 @@ def washbatch(nlevels,startnum=0):
         for wseed in lwseed:
             for r1 in x:
                 if y < startnum:
-                    print "skipping sim num ", y
+                    print ("skipping sim num ", y)
                     y += 1
                     continue
                 s = "./mod/x86_64/special -python washbatchrun.py"
                 s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)
-                print "sim num = ", y, ", command = ", s
+                print ("sim num = ", y, ", command = ", s)
                 y += 1
                 mylog(s,"washbatch_10dec13.14.log")
                 os.system(s)
@@ -516,14 +516,14 @@ def addwashnqpcol(nqb):
     sampr = 1e3/dt # sampling rate
     vsidx = [2e3/dt,4e3/dt,6e3/dt] # start times for different periods
     veidx = [4e3/dt,6e3/dt,8e3/dt] # end times for different periods
-    for i in xrange(int(nqb.v[0].size())):
+    for i in range(int(nqb.v[0].size())):
         simstr = nqb.get("simstr",i).s
-        print "up to " + str(i) + " out of " + str(nqb.v[0].size())
-        print "\tsim = " , simstr
+        print ("up to " + str(i) + " out of " + str(nqb.v[0].size()))
+        print ("\tsim = " , simstr)
         loadminrundat(simstr) # load the sim data
         j = cdx # j has column index into nqb
-        for k in xrange(len(vsidx)):
-            print "interval=",k,vsidx[k],veidx[k]
+        for k in range(len(vsidx)):
+            print ("interval=",k,vsidx[k],veidx[k])
             vec.resize(0)
             vec.copy(net.vlfp,vsidx[k],veidx[k]) # copy relevant portion of LFP
             vec.sub(vec.mean())       # remove mean
@@ -538,12 +538,12 @@ def basbatch(startnum=0):
     for iseed in liseed:
         for wseed in lwseed:
             if y < startnum:
-                print "skipping sim num ", y
+                print ("skipping sim num ", y)
                 y += 1
                 continue
             s = "./mod/x86_64/special -python basbatchrun.py"
             s += " "+str(iseed)+" "+str(wseed)
-            print "sim num = ", y, ", command = ", s
+            print ("sim num = ", y, ", command = ", s)
             y += 1
             mylog(s,"basbatch_10dec13.14.log")
             os.system(s)
@@ -572,12 +572,12 @@ def currinjbatch(nlevels,startnum=0):
         for wseed in lwseed:
             for i1,r1 in enumerate(x):
                 if y < startnum:
-                    print "skipping sim num ", y
+                    print ("skipping sim num ", y)
                     y += 1
                     continue
                 s = "./mod/x86_64/special -python currinjbatchrun.py"
                 s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)
-                print "sim num = ", y, ", command = ", s
+                print ("sim num = ", y, ", command = ", s)
                 y += 1
                 mylog(s,"currinjbatch_10dec13.14.log")
                 os.system(s)
@@ -609,12 +609,12 @@ def washinjbatch(nlevels,startnum=0):
         for wseed in lwseed:
             for i1,r1 in enumerate(x):
                 if y < startnum:
-                    print "skipping sim num ", y
+                    print ("skipping sim num ", y)
                     y += 1
                     continue
                 s = "./mod/x86_64/special -python washinjbatchrun.py"
                 s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)
-                print "sim num = ", y, ", command = ", s
+                print ("sim num = ", y, ", command = ", s)
                 y += 1
                 mylog(s,"washinjbatch_10dec15.06.log")
                 os.system(s)
@@ -644,12 +644,12 @@ def msbatch(nlevels,startnum=0):
         for wseed in lwseed:
             for i1,r1 in enumerate(x):
                 if y < startnum:
-                    print "skipping sim num ", y
+                    print ("skipping sim num ", y)
                     y += 1
                     continue
                 s = "./mod/x86_64/special -python msbatchrun.py"
                 s += " "+str(iseed)+" "+str(wseed)+" "+str(r1)
-                print "sim num = ", y, ", command = ", s
+                print ("sim num = ", y, ", command = ", s)
                 y += 1
                 mylog(s,"msbatch_11mar28.12.log")
                 os.system(s)
@@ -688,7 +688,7 @@ def checkdir (d):
     if not os.path.exists(d): os.mkdir(d)
     return True
   except:
-    print "could not create directory :" + d
+    print ("could not create directory :" + d)
     return False
 
 
@@ -706,15 +706,15 @@ def batchRun (whichParams,blog,skip=[],qsz=10,bdir="./batchconfigFiles"):
     while True:
       scomm = jobs.get()
       if scomm == None: break
-      print "worker starting : " , scomm
+      print ("worker starting : " , scomm)
       os.system(scomm) #worker function, invoked in a process.
 
-  for i in xrange(len(lsec)):
+  for i in range(len(lsec)):
     if i in skip: continue
     cfgname = os.path.join(bdir, lconfigfilestr[i] + ".cfg")
     writeconf(cfgname,sec=lsec[i],opt=lopt[i],val=lval[i])
     cmd = "python runone.py " + cfgname
-    print cmd, type(cmd)
+    print (cmd, type(cmd))
     appline(cmd,blog)
     jobs.put(cmd)
   workers = []
@@ -732,26 +732,26 @@ def batchRun (whichParams,blog,skip=[],qsz=10,bdir="./batchconfigFiles"):
 # main...
 if __name__ == "__main__":
     na = len(sys.argv) # number of args
-    print sys.argv
+    print (sys.argv)
     if na < 2:
-        print "Usage: python batch.py type[0=nmbatch,1=washbatch,2=currinjbatch,3=basbatch,4=washinj,5=msbatch,6=ntebatch,7=ihbatch],[nlevels,startnum]"
+        print ("Usage: python batch.py type[0=nmbatch,1=washbatch,2=currinjbatch,3=basbatch,4=washinj,5=msbatch,6=ntebatch,7=ihbatch],[nlevels,startnum]")
         sys.exit(1)
 
     ty = int(sys.argv[1])
 
-    print "hello!!! ty is : " + str(ty)
+    print ("hello!!! ty is : " + str(ty))
 
     if ty == 0:
-        print "nmbatch"
+        print ("nmbatch")
         bru = nmbatch
     elif ty == 1:
-        print "washbatch"
+        print ("washbatch")
         bru = washbatch
     elif ty == 2:
-        print "currinjbatch"
+        print ("currinjbatch")
         bru = currinjbatch
     elif ty == 3:
-        print "basbatch"
+        print ("basbatch")
         if na > 2:
             startnum = int(sys.argv[2])
             basbatch(startnum)
@@ -759,28 +759,28 @@ if __name__ == "__main__":
             basbatch()
         sys.exit(0)
     elif ty == 4:
-        print "washinj"
+        print ("washinj")
         bru = washinjbatch
     elif ty == 5:
-        print "msbatch"
+        print ("msbatch")
         bru = msbatch
     elif ty == 6:
-        print "ntebatch"
+        print ("ntebatch")
         bru = ntebatch
     elif ty == 7:
-        print "ihbatch"
+        print ("ihbatch")
         bru = ihbatch
     elif ty == 8:
-        print "ihbatchPYRBAS"
+        print ("ihbatchPYRBAS")
         bru = ihbatchPYRBAS
     elif ty == 9:
-        print "longihbatchPYRBAS"
+        print ("longihbatchPYRBAS")
         bru = longihbatchPYRBAS
     elif ty == 10:
-        print "longihbatchOLM"
+        print ("longihbatchOLM")
         bru = longihbatchOLM
     else:
-        print str(ty) + "is an unknown batch type!"
+        print (str(ty) + "is an unknown batch type!")
         sys.exit(1)
         
     nlevels = int(sys.argv[2])
