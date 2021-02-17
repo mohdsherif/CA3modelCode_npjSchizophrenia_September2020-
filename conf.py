@@ -352,7 +352,7 @@ def compareConfigParsers(parser1, parser2):
     '''will compare the parser1 and parser2 and return a dictionary of the differences if there are any. If the parsers do not contain the same sections or the same options, no dictionary is returned'''
     resultsDic = {'same':[], 'different':{}}
     if parser1.sections() == parser2.sections():
-        print '\nParsers have same sections, proceeding to examine options'
+        print ('\nParsers have same sections, proceeding to examine options')
         for mysection in parser1.sections():
             if parser1.options(mysection) == parser2.options(mysection):
                 for myoption in parser1.options(mysection):
@@ -363,14 +363,14 @@ def compareConfigParsers(parser1, parser2):
                     else:
                         resultsDic['different'][myoption] = {'first':myval1, 'second':myval2}
             else:
-                print 'Sections of parsers do not have the same options. Will not run further analysis'
+                print ('Sections of parsers do not have the same options. Will not run further analysis')
                 return
     else:
-        print 'Parsers do not have the same sections. Will not run further analysis'
+        print ('Parsers do not have the same sections. Will not run further analysis')
         return
     if len(resultsDic['different']) == 0:
-        print "Parsers are the same"
+        print ("Parsers are the same")
     else:
-        print 'There are differences between the parsers. Please check the returned dictionary'
+        print ('There are differences between the parsers. Please check the returned dictionary')
     return resultsDic
 
