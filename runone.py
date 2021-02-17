@@ -16,7 +16,7 @@ if __name__ == "__main__":
     h.simfiles=simfiles = "pyinit.py geom.py network.py params.py run.py"
     h("runnum=1")
     runnum = 1.0
-    h.datestr=datestr = "10dec15"
+    h.datestr=datestr = "2021feb17"
     h.output_file=output_file = "data/10dec13.14"
     h.uname=uname = "x86_64"
     h.osname=osname="linux"
