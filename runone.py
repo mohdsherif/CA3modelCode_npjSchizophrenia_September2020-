@@ -50,7 +50,7 @@ if __name__ == "__main__":
     if dconf['savestate']: savestate(dconf['statestr'], statedir = './data/stateFiles/')
 
     if dconf['saveout']:
-        print 'calculating...'
+        print ('calculating...')
         net.setsnq()
         net.calc_lfp()
         net.getnqvolt(onlyInterneurons = dconf['getOnlyInterneuronsSomaVolt'])
@@ -61,18 +61,18 @@ if __name__ == "__main__":
         if dconf['DoMakeSignal']:
             saveSignalSpikes = dconf['saveSignalSpikes']
         else: saveSignalSpikes = False
-        print 'saving...'
+        print ('saving...')
         saveSimH5py(dconf['simstr'], datadir='./data/batch/', savevoltnq = dconf['saveSomaVolt'], savePyrDrivingSpikes = savePyrDrivingSpikes, saveSignalSpikes = saveSignalSpikes)
 
     # to obtain and save connectivity matrix
     if dconf['saveconn']:
-        print 'getting connectivity NQS and saving it as H5Py group...'
+        print ('getting connectivity NQS and saving it as H5Py group...')
         f = h5py.File('./data/batch/'+dconf['simstr']+'_connMatrix.h5py', 'a')
         saveNQS_h5pyGroup(f, net.nqcon, 'connMatrix')
         f.close()
 
     # to save spike timings of netStims
     if dconf['saveout'] and len(net.linputVec) >0 and dconf['saveNetStimInputs']: # if net.record_all_netStims_times() is called
-        print 'saving netstim spike timings as numpy array...'
+        print ('saving netstim spike timings as numpy array...')
         linputVecArr = np.array([np.array(myvec) for myvec in net.linputVec])
         np.save('./data/batch/'+dconf['simstr']+'_netstimSpikeTimings.npy', linputVecArr)
