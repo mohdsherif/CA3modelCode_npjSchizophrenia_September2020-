@@ -1,5 +1,5 @@
 '''this file contains conig parameters for the model'''
-import ConfigParser
+import configparser
 import io
 import numpy as np
 
@@ -176,7 +176,7 @@ def writeconf (fn,sec,opt,val):
   specified in section (sec) , option (opt), and value (val) 
   saves to output filepath fn'''
 
-  conf = ConfigParser.ConfigParser()
+  conf = configparser.ConfigParser()
   conf.readfp(io.BytesIO(def_config)) # start with defaults
   # then change entries by user-specs
   for i in xrange(len(sec)): conf.set(sec[i],opt[i],val[i])
@@ -186,7 +186,7 @@ def writeconf (fn,sec,opt,val):
 # read config file
 def readconf (fn="netcfg.cfg"):
 
-  config = ConfigParser.ConfigParser()
+  config = configparser.ConfigParser()
   config.read(fn)
 
   def conffloat (base,var,defa): # defa is default value
