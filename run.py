@@ -7,7 +7,7 @@ import datetime # to format time of simulation
 # from network import *
 # from params import *
 import sys
-execfile('analysisPlottingCode.py')
+exec(open("./analysisPlottingCode.py").read()) # execfile('analysisPlottingCode.py')
 try:
     if not sys.path.__contains__('/usr/site/nrniv/local/python'):
         sys.path.append('/usr/site/nrniv/local/python')
