@@ -237,7 +237,7 @@ class Network(object):
 
     def __init__(self,noise=True,connections=True,DoMakeNoise=True,iseed=1234,UseNetStim=True,DoMakeSignal=False,signal_rseed=7483,signal_isi=200,wseed=4321,scale=1.0,MSGain_olm=0.0,MSGain_pv=0.0,MSGain_cck=0.0,SaveConn=False,UseSTDP=False):
         #import math
-        print "Setting Cells"
+        print ("Setting Cells")
         self.pyr = Population(cell_type=PyrAdr,n=pyrPop_cNum, x= 0, y=0, z=0, dx=50, amp= 50e-3, dur=1e9, delay=2*h.dt)
         self.bas = Population(cell_type=PVC,   n=basPop_cNum, x=10, y=0, z=0, dx=50, amp=     0, dur=  0, delay=2*h.dt)
         self.olm = Population(cell_type=Ow,   n=olmPop_cNum, x=20, y=0, z=0, dx=50, amp=-25e-3, dur=1e9, delay=2*h.dt)
@@ -273,7 +273,7 @@ class Network(object):
         self.linputVec = [] # list of vectors recording from netstims
         
         if connections:
-            print "Setting Connections"
+            print ("Setting Connections")
             self.set_all_conns()
 
     def set_noise_inputs(self,simdur): #simdur only used for make_all_noise
@@ -283,11 +283,11 @@ class Network(object):
             self.set_gfluct_noise()
             print('will use Gfluct for synaptic noise')
             pass
-        print "Done!"
+        print ("Done!")
 
 
     def set_signal_input(self, simdur):
-        print 'Will make signal netstim'
+        print ('Will make signal netstim')
         self.make_signal(simdur, self.signal_isi)
 
 
@@ -425,23 +425,23 @@ class Network(object):
         # numpy.random.seed(rdmseed) # initialize random # generator
         rdtmp = rdmseed # starting sead value - incremented in make_NetStims
         if self.DoMakeNoise:
-            print "Making NetStims for Generating Random Input (Noise)"
-            print "Making Noise"
-            print "to PYR"
+            print ("Making NetStims for Generating Random Input (Noise)")
+            print ("Making Noise")
+            print ("to PYR")
             rdtmp=self.make_NetStims(po=self.pyr, syn="somaAMPAf",   w=0.05e-3 * extrinsic_pyr_AMPAfR_weight_scale,  ISI=1,  time_limit=simdur, sead=rdtmp) 
             rdtmp=self.make_NetStims(po=self.pyr, syn="Adend3AMPAf", w=0.05e-3 * extrinsic_pyr_AMPAfR_weight_scale,  ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.pyr, syn="somaGABAf",   w=0.012e-3 * extrinsic_pyr_GABAfR_weight_scale, ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.pyr, syn="Adend3GABAf", w=0.012e-3 * extrinsic_pyr_GABAfR_weight_scale, ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.pyr, syn="Adend3NMDA",  w=6.5e-3,   ISI=100,time_limit=simdur, sead=rdtmp)
-            print "to BAS"          
+            print ("to BAS")          
             rdtmp=self.make_NetStims(po=self.bas, syn="somaAMPAf",   w=0.02e-3 * extrinsic_pv_AMPAfR_weight_scale,  ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.bas, syn="somaGABAf",   w=0.2e-3 * extrinsic_pv_GABAfR_weight_scale,   ISI=1,  time_limit=simdur, sead=rdtmp)
-            print "to OLM"
+            print ("to OLM")
             #rdtmp=self.make_NetStims(po=self.olm, syn="somaAMPAf",   w=0.02e-3,  ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.olm, syn="somaAMPAf",   w=0.0625e-3 * olm_AMPARw_scaling * extrinsic_olm_AMPAfR_weight_scale,  ISI=1,  time_limit=simdur, sead=rdtmp)
             rdtmp=self.make_NetStims(po=self.olm, syn="somaGABAf",   w=0.2e-3 * extrinsic_olm_GABAfR_weight_scale,   ISI=1,  time_limit=simdur, sead=rdtmp)
             if includeCCKcs:
-                print "to CCK"          
+                print ("to CCK")          
                 # soma targeting cck cells
                 rdtmp=self.make_NetStims(po=self.cck_somaPyr, syn="somaAMPAf",   w=0.02e-3 * extrinsic_cck_AMPAfR_weight_scale,  ISI=1,  time_limit=simdur, sead=rdtmp)
                 rdtmp=self.make_NetStims(po=self.cck_somaPyr, syn="somaGABAf",   w=0.2e-3 * GABAontoCCK_scale * extrinsic_cck_GABAfR_weight_scale,   ISI=1,  time_limit=simdur, sead=rdtmp)
@@ -506,7 +506,7 @@ class Network(object):
 
     def set_all_conns(self):
         random.seed(self.wseed) # initialize random # generator for wiring
-        print "PYR -> X , NMDA"   # src, trg, syn, delay, weight, conv
+        print ("PYR -> X , NMDA")   # src, trg, syn, delay, weight, conv
         self.pyr_bas_NM=self.set_connections(self.pyr,self.bas, "somaNMDA", 2, 1.15*1.2e-3 * (1 / CB1R_pyr_pv_weight), pyr_bas_conv)
         self.pyr_olm_NM=self.set_connections(self.pyr,self.olm, "somaNMDA", 2, 1.0*0.7e-3 * (1 / CB1R_pyr_olm_weight), pyr_olm_conv)
 	# location of targeting of pyr to pyr connections
@@ -521,7 +521,7 @@ class Network(object):
                 self.pyr_cck_Adend3_NM = self.set_connections(self.pyr,self.cck_Adend3, "somaNMDA", 2, 1.15*1.2e-3, pyr_cck_Adend3_conv)
         
         if self.UseSTDP: # did NOT implement CB1R agonism, or AMPAR agonism with STDP
-            print "PYR -> X , AMPA with STDP"
+            print ("PYR -> X , AMPA with STDP")
             self.pyr_bas_AM=self.set_connections(self.pyr,self.bas, "somaAMPASTDP",2, 0.3 * 1.2e-3 * (1 / CB1R_pyr_pv_weight),  pyr_bas_conv)
             self.pyr_olm_AM=self.set_connections(self.pyr,self.olm, "somaAMPASTDP",2, 0.3 * 1.2e-3 * (1 / CB1R_pyr_olm_weight),  pyr_olm_conv)
             self.pyr_pyr_AM=self.set_connections(self.pyr,self.pyr, "Adend3AMPASTDP",2, 0.5 * 0.04e-3, pyr_pyr_conv)
@@ -532,7 +532,7 @@ class Network(object):
                     self.pyr_cck_Adend3_AM=self.set_connections(self.pyr,self.cck_Adend3, "somaAMPASTDP",2,0.3 * 1.2e-3, pyr_cck_Adend3_conv)                
                 
         else:
-            print "PYR -> X , AMPA"
+            print ("PYR -> X , AMPA")
             self.pyr_bas_AM=self.set_connections(self.pyr,self.bas, "somaAMPAf",2, 0.3 * 1.2e-3 * (1 / CB1R_pyr_pv_weight) * intrinsic_pv_AMPAfR_weight_scale,  pyr_bas_conv)
             self.pyr_olm_AM=self.set_connections(self.pyr,self.olm, "somaAMPAf",2, 0.3 * 1.2e-3 * (1 / CB1R_pyr_olm_weight) * olm_AMPARw_scaling * intrinsic_olm_AMPAfR_weight_scale,  pyr_olm_conv)
 	    # location of targeting of pyr to pyr connections
@@ -546,7 +546,7 @@ class Network(object):
                 if cck_Adend3Pop_cNum != 0:
                     self.pyr_cck_Adend3_AM=self.set_connections(self.pyr,self.cck_Adend3, "somaAMPAf",2, 0.3 * 1.2e-3 * intrinsic_cck_AMPAfR_weight_scale,  pyr_cck_Adend3_conv)
             
-        print "BAS -> X , GABA"
+        print ("BAS -> X , GABA")
         #self.bas_bas_GA=self.set_connections(self.bas,self.bas, "somaGABAf",2, 1.0e-3, 60)#orig 1
         #self.bas_bas_GA=self.set_connections(self.bas,self.bas, "somaGABAf",2, 2  *  1.5*1.0e-3, 60)#new 1
         self.bas_bas_GA=self.set_connections(self.bas,self.bas, "somaGABAf",2, 3 * 1.5 * 1.0e-3 * intrinsic_pv_GABAfR_weight_scale, bas_bas_conv)#new 2
@@ -559,7 +559,7 @@ class Network(object):
             self.bas_cck_somaPyr_GA=self.set_connections(self.bas,self.cck_somaPyr, "somaGABAf",2, 3 * 1.5 * 1.0e-3 * intrinsic_cck_GABAfR_weight_scale, bas_cck_somaPyr_conv)
 
 
-        print "OLM -> PYR , GABA"
+        print ("OLM -> PYR , GABA")
         #self.olm_pyr_GA=self.set_connections(self.olm,self.pyr, "Adend2GABAs",2, 3*6.0e-3, 20)#original weight value
         if olm_pyr_location == 'mid-apical':
             self.olm_pyr_GA=self.set_connections(self.olm,self.pyr, "Adend2GABAs",2, 4.0 * 3 * 6.0e-3 * intrinsic_pyr_GABAfR_weight_scale, olm_pyr_conv)#new weight value
@@ -568,7 +568,7 @@ class Network(object):
        
 
         if includeCCKcs:
-            print "CCK -> X , GABA" # src, trg, syn, delay, weight, conv
+            print ("CCK -> X , GABA") # src, trg, syn, delay, weight, conv
             # CCK_somaPyr to themselves and to bas
             self.cck_somaPyr_bas_GA=self.set_connections(self.cck_somaPyr,self.bas, "somaGABAf",2, 3 * 1.5 * 1.0e-3 * intrinsic_pv_GABAfR_weight_scale, cck_somaPyr_bas_conv)
             self.cck_somaPyr_cck_somaPyr_GA=self.set_connections(self.cck_somaPyr,self.cck_somaPyr, "somaGABAf",2, 3 * 1.5 * 1.0e-3 * intrinsic_cck_GABAfR_weight_scale, cck_somaPyr_cck_somaPyr_conv)
@@ -595,7 +595,7 @@ class Network(object):
                 nc.append(h.NetCon(src.cell[pre_id].soma(0.5)._ref_v, trg.cell[post_id].__dict__[syn].syn, 0, delay, w, sec=src.cell[pre_id].soma)) 
         if self.SaveConn:
             try:
-                print self.nqcon.size()
+                print (self.nqcon.size())
             except:
                 self.nqcon = h.NQS("id1","id2","w","syn")
                 self.nqcon.strdec("syn")
@@ -607,13 +607,13 @@ class Network(object):
     def load_spikes(self,fn,po,syn,w,time_limit=10000):
         fn = os.path.join("data",fn)
         events = numpy.load(fn)
-        print "Begin setting events...", po
-        print events.shape
+        print ("Begin setting events...", po)
+        print (events.shape)
         for i,ii in enumerate(events):
             ii=ii[ii<=time_limit]
             po.cell[i].__dict__[syn].append(ii)
             po.cell[i].__dict__[syn].syn.Vwt = w
-        print "End setting events"
+        print ("End setting events")
         return events
 
     def rasterplot(self,sz=2):
@@ -728,9 +728,9 @@ class Network(object):
             self.fnq.select("ty",ty)
             vf = self.fnq.getcol("freq")
             if vf.size() > 1:
-                print "ty: ", ty, " avg rate = ", vf.mean(), "+/-", vf.stderr(), " Hz"
+                print ("ty: ", ty, " avg rate = ", vf.mean(), "+/-", vf.stderr(), " Hz")
             else:
-                print "ty: ", ty, " avg rate = ", vf.mean(), "+/-", 0.0 , " Hz"
+                print ("ty: ", ty, " avg rate = ", vf.mean(), "+/-", 0.0 , " Hz")
             ty += 1
 
     # lfp is modeled as a difference between voltages in distal apical and basal compartemnts
@@ -770,7 +770,7 @@ class Network(object):
         gr = [30, 80] # Gamma frequency range
         t0i = int(t0/h.dt)
         if t0i > len(self.lfp):
-            print "LFP is too short! (<200 ms)"
+            print ("LFP is too short! (<200 ms)")
             return 0,0,0,0,0,0
         
         pylab.figure(fig)
@@ -801,7 +801,7 @@ class Network(object):
         called. This way the netstim (ns) and netcons (nc) are added to the end of nsl and ncl.
         Implementation is similar to implementing drives. All pyramidal cells will recieve the same
         signal input.'''
-        print 'Making signal NetStim and NetCons'
+        print ('Making signal NetStim and NetCons')
         ns = h.NetStim()
         ns.interval = signal_isi
         ns.noise = 0.5
@@ -819,7 +819,7 @@ class Network(object):
             nc.delay = h.dt * 2
             nc.weight[0] = 100 * 0.05e-3 # 0.05e-3 # same as the ones from self.make_NetStims for Adend3AMPAf
             self.ncl.append(nc) # these are the last ones appened, so to access them, they will be the last 800 NetCons
-        print 'Done!'
+        print ('Done!')
                 
     def recordSignal_spikes(self):
         '''will record the spike train coming from the signal netstim. Keep in mind that the delay imposed by the signal NetCon is not taken into account.'''
