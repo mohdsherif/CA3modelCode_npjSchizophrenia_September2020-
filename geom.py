@@ -9,7 +9,8 @@ from conf import *
 ########### the following allows for setting and reading the config file ###########
 def setfcfg ():
   '''determine config file'''
-  fcfg = "netcfg.cfg" # default config file name
+  # fcfg = "netcfg.cfg" # default config file name
+  fcfg = 'fig1simulationConfig.cfg'
   for i in range(len(sys.argv)):
     if sys.argv[i].endswith(".cfg") and os.path.exists(sys.argv[i]):
       fcfg = sys.argv[i]
