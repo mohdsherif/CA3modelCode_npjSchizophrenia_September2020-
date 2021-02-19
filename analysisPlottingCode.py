@@ -14,26 +14,6 @@ import h5py
 from subprocess import check_output
 import psd
 
-# uncomment the following to be able to use it from a terminal where neuron is not loaded - this code will load NEURON
-
-###from neuron import h
-###h("strdef simname, allfiles, simfiles, output_file, datestr, uname, osname, comment")
-####some of the above names are optional, so no values are assigned to them
-###h("runnum=1")
-###runnum = 1.0
-###h.uname=uname = "x86_64"
-###h.osname=osname="linux"
-###h("templates_loaded=0")
-###templates_loaded=0
-###h("xwindows=1.0")
-###xwindows = 1.0
-###
-###h.xopen("/usr/site/nrniv/simctrl/hoc/nrnoc.hoc")
-###h.xopen("init.hoc")
-
-
-
-# PATH = "/u/mohdsh/Projects/CPP/mtlhpc_CPP/data/" #so I don't have to type the whole into the fileName parameter
 
 def powerSum(lfp, sampr, freqLow, freqHigh, numOfSlices, slice_dur, start = 0):
     '''a function that would return the sum of the power in freq range freqLow to freqHigh, in signal lfp. will begin calculation at start (in seconds). slice_dur in seconds
@@ -111,28 +91,6 @@ def pravgratesTimeRun(tstart, tstop):
     calcPrintAvgRates(pyr_fire, bas_fire, olm_fire, cckSoma_fire, cckAdend2Pyr_fire, pyrPop_cNum, basPop_cNum, olmPop_cNum, cck_somaPyrPop_cNum, cck_Adend2PyrPop_cNum, tstart, tstop)
 
 
-# def pravgratesTimeLoaded(myfile, tstart, tstop):
-#     '''myfile is an H5Py file, which has been generated and saved by saveSimH5py. The function will calculate and print the avg rates of firing of cells between tstart and tstop in seconds - STILL IN PROGRESS'''
-#     pyrPop_cNum = myfile.attrs['pyrPop_cNum']
-#     basPop_cNum = myfile.attrs['basPop_cNum']
-#     olmPop_cNum = myfile.attrs['olmPop_cNum']
-#     cck_somaPyrPop_cNum = myfile.attrs['cck_somaPyrPop_cNum']
-#     cck_Adend2PyrPop_cNum = myfile.attrs['cck_Adend2PyrPop_cNum']
-#     # total number of spikes per cell type
-#     mygroup = myfile['spikesnqs']
-#     pyr_fire = sum(mygroup['ty'].value == 0)
-#     bas_fire = sum(mygroup['ty'].value == 1)
-#     olm_fire = sum(mygroup['ty'].value == 2)
-#     if myfile.attrs['includeCCKcs']:
-#         cckSomaPyr_fire = sum(mygroup['ty'].value == 3)
-#         cckAdend2Pyr_fire = sum(mygroup['ty'].value == 4)
-#         calcPrintAvgRates(pyr_fire, bas_fire, olm_fire, cckSomaPyr_fire, cckAdend2Pyr_fire, pyrPop_cNum, basPop_cNum, olmPop_cNum, cck_somaPyrPop_cNum, cck_Adend2PyrPop_cNum, tstart, tstop)
-#     else:
-#         cckSomaPyr_fire = 0
-#         cckAdend2Pyr_fire = 0
-#         calcPrintAvgRates(pyr_fire, bas_fire, olm_fire, cckSomaPyr_fire, cckAdend2Pyr_fire, pyrPop_cNum, basPop_cNum, olmPop_cNum, cck_somaPyrPop_cNum, cck_Adend2PyrPop_cNum, tstart, tstop)
-
-
 def calcCellAvgRateLoaded(myfile, tstart, tstop, celltype):
     '''myfile is an H5Py file, which ahs been generated and saved by saveSumH5py. tstart and tstop are in milliseconds. The function will calculate and print the avg rates of firing of cell type celltype (to be found in myfile['spikesnqs']['ty']. pyr: ty==0; bas: ty == 1; olm: ty == 2; cckSomaPyr: ty == 3; cckAdend2Pyr == 4. The rate will be per second (Hz)'''
     if celltype == 3 or celltype == 4:
@@ -157,32 +115,6 @@ def calcCellAvgRateLoaded(myfile, tstart, tstop, celltype):
     cell_rate = cell_numSpikes / duration / cellPop_cNum
     return cell_rate
 
-
-# def calcPrintAvgRates(pyr_fire, bas_fire, olm_fire, cckSomaPyr_fire, cckAdend2Pyr_fire, pyrPop_cNum, basPop_cNum, olmPop_cNum, cck_somaPyrPop_cNum, cck_Adend2PyrPop_cNum, tstart, tstop):
-#     '''will calculate and print the average firing rate of cell types'''
-#     duration = (tstop - tstart) / 1000. # in seconds
-#     pyr_rate = pyr_fire / duration / pyrPop_cNum
-#     bas_rate = bas_fire / duration / basPop_cNum
-#     olm_rate = olm_fire / duration / olmPop_cNum
-#     if cckSomaPyr_fire != 0:
-#         cckSoma_rate = cckSomaPyr_fire / duration / cck_somaPyrPop_cNum
-#     if cckAdend2Pyr_fire != 0:
-#         cckAdend2Pyr_rate = cckAdend2Pyr_fire / duration / cck_Adend2PyrPop_cNum
-#     print "pyramidal cell count:", pyrPop_cNum
-#     print "basket cell count:", basPop_cNum
-#     print "OLM cell count:", olmPop_cNum
-#     if cckSomaPyr_fire != 0:
-#         print "cckSomaPyr cell count:", cck_somaPyrPop_cNum
-#     if cckAdend2Pyr_fire != 0:
-#         print "cckAdend2Pyr cell count:", cck_Adend2PyrPop_cNum
-#     print "\npyramidal population rate: " + str(pyr_rate) + ' Hz'
-#     print "basket population rate: " + str(bas_rate) + ' Hz'
-#     print "OLM population rate: " + str(olm_rate) + ' Hz'
-#     if cckSomaPyr_fire != 0:
-#         print "cckSoma population rate: " + str(cckSoma_rate) + ' Hz'
-#     if cckAdend2Pyr_fire != 0:
-#         print "cckAdend2Pyr population rate: " + str(cckAdend2Pyr_rate) + ' Hz'
-    
 
 def readVecSpect(fileName, subtractMean = 1):
     '''this will read vector file and plot spectrogram. Use iPython for it'''
@@ -803,40 +735,6 @@ def getspecg (vlfp,killms=0,sampr=1e3/h.dt,NFFT=256, freqstart=0, freqend=250,*a
     selectedtt = tt[position]
 #    return Pxx,freqs,tt,im
     return selectedPxx, selectedfreqs, selectedtt
-
-# minfreq = 0
-# maxfreq = 250
-
-# nsamp = killms / h.dt
-# #v1.copy(vlfp,nsamp,vlfp.size-1-nsamp)
-# vlfpcopy = np.array(vlfp)
-# vlfpcopy = vlfpcopy[nsamp:vlfpcopy.size]
-# vlfpcopy = vlfpcopy - vlfpcopy.mean()
-# Pxx,freqs,bins,im = mp.specgram(vlfpcopy,Fs=sampr,NFFT=NFFT,noverlap=NFFT/2.0)
-# # position = (freqs >= freqstart) & (freqs <= freqend)
-# # Pxx = Pxx[position]
-# # freqs = freqs[position]
-# #selectedtt = tt[position]
-
-# # modified here
-# #####################################
-# if minfreq is not None and maxfreq is not None:
-#     Pxx = Pxx[(freqs >= minfreq) & (freqs <= maxfreq)]
-#     freqs = freqs[(freqs >= minfreq) & (freqs <= maxfreq)]
-# #####################################
-
-# Z = 10. * np.log10(Pxx)
-# Z = np.flipud(Z)
-
-# # if xextent is None: xextent = 0, np.amax(bins)
-# # xextent = 0, np.amax(bins)
-# # xmin, xmax = xextent
-# Fc = 0
-# freqs += Fc
-# extent = xmin, xmax, freqs[0], freqs[-1]
-# fig, ax = mp.subplots(1,1)
-# im = ax.imshow(Z, extent=extent)#, **kwargs)
-# ax.axis('auto')
 
 
 def synthLFP (sampr=10e3,endt=10e3,nonModAmp=1,PhaseModF=8,AmpModF=30,noiseMU=0,noiseSTD=1,rdmS=1234):
