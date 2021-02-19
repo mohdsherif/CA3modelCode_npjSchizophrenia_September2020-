@@ -1,7 +1,5 @@
 '''contain functions in python to deal with data from mtlhpc model'''
 
-# from IPython.core.debugger import Tracer; debug_here = Tracer()
-
 import numpy
 #from mtspec import *
 #from neuron import h, rxd, gui # rxd doesn't support threads - simulation in the current state is multi-threaded
@@ -153,7 +151,8 @@ def calcCellAvgRateLoaded(myfile, tstart, tstop, celltype):
     elif celltype == 2:
         cellPop_cNum = myfile.attrs['olmPop_cNum']
     duration = (tstop - tstart) / 1000. # in seconds
-    timeIntervalIndex = (myfile['spikesnqs']['t'].value > tstart) & (myfile['spikesnqs']['t'].value < tstop)
+    # timeIntervalIndex = (myfile['spikesnqs']['t'].value > tstart) & (myfile['spikesnqs']['t'].value < tstop)
+    timeIntervalIndex = (myfile['spikesnqs']['t'][()] > tstart) & (myfile['spikesnqs']['t'][()] < tstop)
     cell_numSpikes = np.sum(myfile['spikesnqs']['ty'][timeIntervalIndex] == celltype)
     cell_rate = cell_numSpikes / duration / cellPop_cNum
     return cell_rate
@@ -494,7 +493,8 @@ def mprasterplotH5py(mygroup, rasterax, killms=0, showInterneuron = True, *args,
         cellTypes = ['pyr', 'bas', 'olm']
         cellTypeIndex = [0, 1, 2]
         colorList = ['red', 'green', 'blue']
-        if mygroup['ty'].value.max() ==4:
+        # if mygroup['ty'].value.max() ==4:
+        if mygroup['ty'][()].max() ==4:
             cellTypes.append('cck_somaPyr')
             cellTypes.append('cck_Adend2Pyr')
             cellTypeIndex.append(3) # for soma targeting cck
@@ -505,7 +505,8 @@ def mprasterplotH5py(mygroup, rasterax, killms=0, showInterneuron = True, *args,
         colorId = 0
         plotDic = {}
         for ctype in enumerate(cellTypes):
-            whereArray = mygroup['ty'].value == [ctype[0]]
+            # whereArray = mygroup['ty'].value == [ctype[0]]
+            whereArray = mygroup['ty'][()] == [ctype[0]]
             timeArray = np.array(mygroup['t'][whereArray])
             idArray = np.array(mygroup['id'][whereArray])
             plotDic[ctype[1]] = {'id':idArray,'t':timeArray}
@@ -515,7 +516,8 @@ def mprasterplotH5py(mygroup, rasterax, killms=0, showInterneuron = True, *args,
         xlim_max = max(plotDic[key]['t'].max() for key in plotDic.keys() if plotDic[key]['t'].size > 0)
         rasterax.set_xlabel('time (msec)')
         rasterax.set_ylabel('cell ID')
-        rasterax.set_xlim(0, mygroup['t'].value.max())
+        # rasterax.set_xlim(0, mygroup['t'].value.max())
+        rasterax.set_xlim(0, mygroup['t'][()].max())
         mp.draw()
         if showInterneuron: rasterax.set_ylim(700, )
         return plotDic
@@ -748,7 +750,8 @@ def plotIndividualVoltages(cell_type, cellidlist, f, axes, separate = 0, colorma
     tstop = f.attrs['tstop']
     i = 0
     for cellName in cell_nameslist:
-        axes.plot(np.linspace(0,tstop,group[cellName].size),group[cellName].value+i*separate, color = colormap(colorid[i]), label = cellName, *args, **kwargs)
+        # axes.plot(np.linspace(0,tstop,group[cellName].size),group[cellName].value+i*separate, color = colormap(colorid[i]), label = cellName, *args, **kwargs)
+        axes.plot(np.linspace(0,tstop,group[cellName].size),group[cellName][()]+i*separate, color = colormap(colorid[i]), label = cellName, *args, **kwargs)
     i += 1
     axes.set_ylabel('voltage (mV)')
     axes.set_xlabel('time (ms)')
