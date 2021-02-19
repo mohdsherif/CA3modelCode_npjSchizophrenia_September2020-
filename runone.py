@@ -25,7 +25,7 @@ if __name__ == "__main__":
     h("xwindows=1.0")
     xwindows = 1.0
 
-    h.xopen("/usr/site/nrniv/simctrl/hoc/nrnoc.hoc")
+    h.xopen("nrnoc.hoc")
     # h.xopen("nrnoc.hoc")
     # h('proc setMemb() {}')
     h.xopen("init.hoc")
