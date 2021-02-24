@@ -8,7 +8,7 @@ if __name__ == "__main__":
     import os
     import string
 
-    from neuron import *
+    from neuron import h # *
 #    from neuron import h, rxd, gui
     h("strdef simname, allfiles, simfiles, output_file, datestr, uname, osname, comment")
     h.simname=simname = "mtlhpc"
@@ -25,10 +25,10 @@ if __name__ == "__main__":
     h("xwindows=1.0")
     xwindows = 1.0
 
-    h.xopen("nrnoc.hoc")
+    h.xopen("./hoc_files/nrnoc.hoc")
     # h.xopen("nrnoc.hoc")
     # h('proc setMemb() {}')
-    h.xopen("init.hoc")
+    h.xopen("./hoc_files/init.hoc")
 
     from pyinit import *
     # from geom import *
