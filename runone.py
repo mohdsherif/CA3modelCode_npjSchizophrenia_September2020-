@@ -8,8 +8,7 @@ if __name__ == "__main__":
     import os
     import string
 
-    from neuron import h # *
-#    from neuron import h, rxd, gui
+    from neuron import h, gui # *
     h("strdef simname, allfiles, simfiles, output_file, datestr, uname, osname, comment")
     h.simname=simname = "mtlhpc"
     h.allfiles=allfiles = "geom.hoc pyinit.py geom.py network.py params.py run.py"
@@ -26,13 +25,10 @@ if __name__ == "__main__":
     xwindows = 1.0
 
     h.xopen("./hoc_files/nrnoc.hoc")
-    # h.xopen("nrnoc.hoc")
-    # h('proc setMemb() {}')
     h.xopen("./hoc_files/init.hoc")
 
     from pyinit import *
-    # from geom import *
-    # from network import *
+
     exec(open("./geom.py").read()) # execfile("geom.py")
     exec(open("./network.py").read()) # execfile("network.py")
     exec(open("./params.py").read()) # execfile("params.py") # from params import *
