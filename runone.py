@@ -24,8 +24,8 @@ if __name__ == "__main__":
     h("xwindows=1.0")
     xwindows = 1.0
 
-    h.xopen("./hoc_files/nrnoc.hoc")
-    h.xopen("./hoc_files/init.hoc")
+    h.xopen("nrnoc.hoc")
+    h.xopen("init.hoc")
 
     from pyinit import *
 
