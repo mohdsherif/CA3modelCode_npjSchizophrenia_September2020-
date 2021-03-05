@@ -30,7 +30,7 @@ hCurrent_g_cck_scaling = dconf['hCurrent_g_cck_scaling']
 ########### code for defining cells and synapses ###########
 
 
-h('load_file("./hoc_files/pywrap.hoc")')
+# h('load_file("./hoc_files/pywrap.hoc")')
 
 class Synapse:
     def __init__(self, sect, loc, tau1, tau2, e):
