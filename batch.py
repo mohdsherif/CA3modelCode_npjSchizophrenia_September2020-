@@ -5,9 +5,9 @@
 import sys
 import os
 import numpy
-from modindex import *
+# from modindex import *
 import multiprocessing
-from Queue import Queue
+# from Queue import Queue
 from conf import writeconf
 
 # from IPython.core.debugger import Tracer
