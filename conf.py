@@ -177,11 +177,14 @@ def writeconf (fn,sec,opt,val):
   saves to output filepath fn'''
 
   conf = configparser.ConfigParser()
-  conf.readfp(io.BytesIO(def_config)) # start with defaults
+  # conf.readfp(io.BytesIO(def_config)) # start with defaults - ERROR FROM THIS LINE in python3 - FIXED
+  conf.read_string(def_config)
   # then change entries by user-specs
-  for i in range(len(sec)): conf.set(sec[i],opt[i],val[i])
+  for i in range(len(sec)):
+      # conf.set(sec[i],opt[i],val[i]) # error here related to val having to be a string
+      conf[sec[i]][opt[i]] = str(val[i])
   # write config file
-  with open(fn, 'wb') as cfile: conf.write(cfile)
+  with open(fn, 'w') as cfile: conf.write(cfile) # not writing as binary
 
 # read config file
 def readconf (fn="netcfg.cfg"):
