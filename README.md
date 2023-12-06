@@ -16,6 +16,8 @@ After you install the required packages, compile the mod files:
 To plot a figure similar to figure 1 in the paper with the control conditions, you will need first to run a control simulation. The configuraiton file with the parameters for the model are in fig1simulationConfig.cfg file.
 The following code will run a simulation that is 3 seconds long (it takes around one minute to run on my machine with 8 cores), and save the resulting output file in directory ./data/batch.
 
+    python runone.py
+
 After the file has been generated (or if you want to plot the provided output sample file), you can run the following code:
 
     python -i analysisPlottingCode.py
