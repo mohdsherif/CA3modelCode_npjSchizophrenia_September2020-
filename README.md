@@ -13,11 +13,12 @@ After you install the required packages, compile the mod files:
 
     nrnivmodl
 
+## Running one simulation (fig. 1):
 To plot a figure similar to figure 1 in the paper with the control conditions, you will need first to run a control simulation. The configuration file with the parameters for the model are in fig1simulationConfig.cfg file.
 The following code will run a simulation that is 3 seconds long (it takes around one minute to run on my machine with 8 cores), and save the resulting output file in directory ./data/batch.
 
     python runone.py
-
+## Plotting results of one simulation (fig. 1):
 After the file has been generated (or if you want to plot the provided output sample file), you can run the following code:
 
     python -i analysisPlottingCode.py
@@ -47,3 +48,48 @@ Then inside python:
 
 You should get a figure similar to the one below:
 ![Alt text](fig1sample.png?raw=true "Optional Title")
+
+## Running a batch modifying a parameter:
+If you are interested in examining variation in parameter values, e.g. scaling NMDAR conductance on OLM cells down and up (multiplying by a scaling factor), you can paste the following code into a python shell:
+
+    from batch import batchRun, NewParam
+    import os
+    
+    mytstop = 100
+    
+    lnmdarw_olm_scaling = [0.25, 0.5, 1, 1.5, 2] # scaling of 1 is the "control" where the conductance gets multiplied by 1
+    
+    liseed = [1234, 6912, 9876] # using 3 randomization seeds for input spike times
+    lwseed = [4321, 5012, 9281] # using 3 randomization seeds for wiring
+    
+    
+    def runBatch():
+        '''run batch'''
+        lsec, lopt, lval, lconfigfilestr = [], [], [], []
+        for nmdarw_olm_scaling in lnmdarw_olm_scaling:
+            for iseed in liseed:
+                for wseed in lwseed:
+                    tmpsec, tmpopt, tmpval = [], [], []
+                    simstr = '2023dec06_{mytstop}_ms_olmNMDARw_{nmdarw_olm_scaling}_pvPyrIh_{ih_pvPyr_scaling}_pyrGABA_{gaba_pyr_scaling}_iseed_{iseed}_wseed_{wseed}_a'.format(mytstop = mytstop, nmdarw_olm_scaling = nmdarw_olm_scaling, ih_pvPyr_scaling = ih_pvPyr_scaling, gaba_pyr_scaling = gaba_pyr_scaling, iseed = iseed, wseed = wseed)
+                    myfilename = '/u/mohdsh/Projects/ca3cannabisMTL/data/batch/{simstr}.h5py'.format(simstr = simstr)
+                    if os.path.exists(myfilename): # skip if the simulation already exists
+                        print (simstr + ' exists')
+                        continue
+                    NewParam(tmpsec,tmpopt,tmpval,'run','dorun',1)
+                    NewParam(tmpsec,tmpopt,tmpval,'run','saveout',1)
+                    NewParam(tmpsec,tmpopt,tmpval,'run','tstop',mytstop)
+                    NewParam(tmpsec,tmpopt,tmpval,'run','simstr',simstr)
+                    NewParam(tmpsec,tmpopt,tmpval,'net','scale',0)
+                    NewParam(tmpsec,tmpopt,tmpval,'net','includeCCKcs',0)
+                    NewParam(tmpsec,tmpopt,tmpval,'net','basPop_cNum', 200)
+                    NewParam(tmpsec,tmpopt,tmpval,'net','olmPop_cNum', 200)
+                    NewParam(tmpsec,tmpopt,tmpval,'net','olm_nmdarw_scaling', nmdarw_olm_scaling)
+                    NewParam(tmpsec,tmpopt,tmpval,'stim','DoMakeSignal',0)
+                    NewParam(tmpsec,tmpopt,tmpval,'seed','iseed',iseed)
+                    NewParam(tmpsec,tmpopt,tmpval,'seed','wseed',wseed)
+                    lsec.append(tmpsec); lopt.append(tmpopt); lval.append(tmpval); lconfigfilestr.append(simstr)
+    return lsec, lopt, lval, lconfigfilestr
+    
+    batchRun(runBatch, './batchlog')
+
+You can then plot the results of the simulations using the plotting code above after changing 'simstr' to match the simulation you want to plot.
